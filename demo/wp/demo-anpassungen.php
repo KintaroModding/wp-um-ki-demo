@@ -96,6 +96,23 @@ add_action(
 );
 
 /**
+ * "Premium" badge next to the name of Premium members in the member directory.
+ * The directory loads its cards by AJAX; this filter changes the card data.
+ */
+add_filter(
+	'um_ajax_get_members_data',
+	function ( $data, $user_id ) {
+		$user = get_userdata( $user_id );
+		if ( $user && in_array( 'um_premium', (array) $user->roles, true ) && ! empty( $data['display_name_html'] ) ) {
+			$data['display_name_html'] .= ' <span class="demo-premium" style="display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:#c9771a;color:#fff;font-size:12px;font-weight:600;vertical-align:middle">Premium</span>';
+		}
+		return $data;
+	},
+	10,
+	2
+);
+
+/**
  * Small badge with the current demo version, bottom right on every page.
  * It proves in the call that the newest version from GitHub is running.
  */

@@ -31,6 +31,14 @@
       "titel_en": "Account type: university",
       "text_de": "Neue Option „Hochschule“ beim Kontotyp, in Registrierung und Filter.",
       "text_en": "New option “University” for the account type, in registration and filter."
+    },
+    {
+      "version": "5",
+      "datum": "2026-11-27",
+      "titel_de": "Filter nach Ort",
+      "titel_en": "Filter by city",
+      "text_de": "Im Who Is Who kann man jetzt nach Ort filtern.",
+      "text_en": "The Who Is Who can now be filtered by city."
     }
   ]
 }

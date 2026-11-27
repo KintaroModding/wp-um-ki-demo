@@ -15,6 +15,14 @@
       "titel_en": "Premium badge",
       "text_de": "Premium-Einträge zeigen im Who Is Who ein Abzeichen neben dem Namen.",
       "text_en": "Premium entries show a badge next to the name in the Who Is Who."
+    },
+    {
+      "version": "3",
+      "datum": "2026-11-27",
+      "titel_de": "Premium-Kennzeichen ohne Umbruch",
+      "titel_en": "Premium badge without line break",
+      "text_de": "Das Abzeichen steht jetzt in einer eigenen Zeile über dem Namen und bricht nicht mehr um.",
+      "text_en": "The badge now sits on its own line above the name and no longer wraps."
     }
   ]
 }

@@ -104,7 +104,9 @@ add_filter(
 	function ( $data, $user_id ) {
 		$user = get_userdata( $user_id );
 		if ( $user && in_array( 'um_premium', (array) $user->roles, true ) && ! empty( $data['display_name_html'] ) ) {
-			$data['display_name_html'] .= ' <span class="demo-premium" style="display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:#c9771a;color:#fff;font-size:12px;font-weight:600;vertical-align:middle">Premium</span>';
+			// Own line above the name, centered, never wraps (long company names wrapped it before).
+			$data['display_name_html'] = '<span class="demo-premium" style="display:table;margin:0 auto 6px;padding:2px 10px;border-radius:999px;background:#c9771a;color:#fff;font-size:12px;line-height:1.5;font-weight:600;white-space:nowrap;word-break:normal;overflow-wrap:normal">Premium</span>'
+				. $data['display_name_html'];
 		}
 		return $data;
 	},

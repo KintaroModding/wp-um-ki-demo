@@ -47,7 +47,7 @@
 
   "verzeichnis": {
     "titel": "Who Is Who",
-    "sichtbar_fuer": "alle",
+    "sichtbar_fuer": "mitglieder",
     "filter": ["kontotyp", "profil_sprache", "profil_typ", "ort"],
     "unter_dem_namen": ["kontotyp"],
     "details": ["ort", "profil_sprache", "beschreibung"],

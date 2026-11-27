@@ -55,6 +55,14 @@
       "titel_en": "After registration: to the directory",
       "text_de": "Neue Mitglieder landen nach der Registrierung im Who Is Who statt auf ihrem Profil.",
       "text_en": "New members land in the Who Is Who after registration instead of their profile."
+    },
+    {
+      "version": "8",
+      "datum": "2026-11-27",
+      "titel_de": "Verzeichnis nur für Mitglieder",
+      "titel_en": "Directory for members only",
+      "text_de": "Das Who Is Who ist nur noch für angemeldete Mitglieder sichtbar.",
+      "text_en": "The Who Is Who is now visible to logged-in members only."
     }
   ]
 }

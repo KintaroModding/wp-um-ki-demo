@@ -8,11 +8,11 @@
     "user_email":     { "typ": "email",    "label": "E-Mail", "pflicht": true },
     "user_password":  { "typ": "password", "label": "Passwort", "pflicht": true },
     "kontotyp":       { "typ": "radio",    "label": "Kontotyp", "pflicht": true,
-                        "optionen": ["eLearning Dienstleister", "Freelancer", "Hochschule"] },
+                        "optionen": ["eLearning Dienstleister", "Freelancer"] },
     "profil_sprache": { "typ": "checkbox", "label": "Sprache des Profils", "pflicht": true,
-                        "optionen": ["Deutsch", "Englisch", "Französisch"] },
+                        "optionen": ["Deutsch", "Englisch"] },
     "profil_typ":     { "typ": "radio",    "label": "Profil", "pflicht": true,
-                        "optionen": ["Basis-Profil", "Premium-Profil", "Partner-Profil"],
+                        "optionen": ["Basis-Profil", "Premium-Profil"],
                         "hilfe": "Premium-Profile erscheinen mit Logo und ausführlicher Beschreibung." },
     "unternehmen":    { "typ": "text",     "label": "Unternehmensname", "pflicht": true },
     "ort":            { "typ": "text",     "label": "Ort" },
@@ -34,21 +34,19 @@
   ],
 
   "rollen": [
-    { "key": "basis",   "name": "Basis-Profil",   "nach_registrierung": "/who-is-who/" },
-    { "key": "premium", "name": "Premium-Profil", "nach_registrierung": "/who-is-who/" },
-    { "key": "partner", "name": "Partner-Profil", "nach_registrierung": "/who-is-who/" }
+    { "key": "basis",   "name": "Basis-Profil" },
+    { "key": "premium", "name": "Premium-Profil" }
   ],
 
   "rolle_nach_profil": {
     "Basis-Profil": "basis",
-    "Premium-Profil": "premium",
-    "Partner-Profil": "partner"
+    "Premium-Profil": "premium"
   },
 
   "verzeichnis": {
     "titel": "Who Is Who",
-    "sichtbar_fuer": "mitglieder",
-    "filter": ["kontotyp", "profil_sprache", "profil_typ", "ort"],
+    "sichtbar_fuer": "alle",
+    "filter": ["kontotyp", "profil_sprache", "profil_typ"],
     "unter_dem_namen": ["kontotyp"],
     "details": ["ort", "profil_sprache", "beschreibung"],
     "pro_seite": 12
@@ -82,10 +80,6 @@
     { "login": "tom-schreiber", "rolle": "basis",
       "daten": { "unternehmen": "Tom Schreiber Moodle-Support", "kontotyp": "Freelancer",
                  "profil_sprache": ["Deutsch", "Englisch"], "profil_typ": "Basis-Profil", "ort": "Berlin",
-                 "beschreibung": "Moodle-Einrichtung, Updates und Schulungen." } },
-    { "login": "sponsor-lernmedien", "rolle": "partner",
-      "daten": { "unternehmen": "Sponsor Lernmedien GmbH", "kontotyp": "eLearning Dienstleister",
-                 "profil_sprache": ["Deutsch"], "profil_typ": "Partner-Profil", "ort": "Hamburg",
-                 "beschreibung": "Partner des Verzeichnisses. Lernmedien für Unternehmen." } }
+                 "beschreibung": "Moodle-Einrichtung, Updates und Schulungen." } }
   ]
 }

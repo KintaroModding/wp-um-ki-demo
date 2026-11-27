@@ -7,62 +7,6 @@
       "titel_en": "Starting point",
       "text_de": "Registrierung und Who-Is-Who-Verzeichnis, nachgebaut mit Ultimate Member.",
       "text_en": "Registration and Who Is Who directory, rebuilt with Ultimate Member."
-    },
-    {
-      "version": "2",
-      "datum": "2026-11-27",
-      "titel_de": "Neue Rolle Partner-Profil",
-      "titel_en": "New role: partner profile",
-      "text_de": "Dritte Stufe „Partner-Profil“ mit eigener Rolle, wählbar bei der Registrierung, plus Beispiel-Eintrag.",
-      "text_en": "Third level “Partner profile” with its own role, selectable at registration, plus a sample entry."
-    },
-    {
-      "version": "3",
-      "datum": "2026-11-27",
-      "titel_de": "Premium-Kennzeichen",
-      "titel_en": "Premium badge",
-      "text_de": "Premium-Einträge zeigen im Who Is Who ein Abzeichen neben dem Namen.",
-      "text_en": "Premium entries show a badge next to the name in the Who Is Who."
-    },
-    {
-      "version": "4",
-      "datum": "2026-11-27",
-      "titel_de": "Kontoart Hochschule",
-      "titel_en": "Account type: university",
-      "text_de": "Neue Option „Hochschule“ beim Kontotyp, in Registrierung und Filter.",
-      "text_en": "New option “University” for the account type, in registration and filter."
-    },
-    {
-      "version": "5",
-      "datum": "2026-11-27",
-      "titel_de": "Filter nach Ort",
-      "titel_en": "Filter by city",
-      "text_de": "Im Who Is Who kann man jetzt nach Ort filtern.",
-      "text_en": "The Who Is Who can now be filtered by city."
-    },
-    {
-      "version": "6",
-      "datum": "2026-11-27",
-      "titel_de": "Profilsprache Französisch",
-      "titel_en": "Profile language: French",
-      "text_de": "Neue Option „Französisch“ bei der Sprache des Profils.",
-      "text_en": "New option “French” for the profile language."
-    },
-    {
-      "version": "7",
-      "datum": "2026-11-27",
-      "titel_de": "Nach Registrierung ins Verzeichnis",
-      "titel_en": "After registration: to the directory",
-      "text_de": "Neue Mitglieder landen nach der Registrierung im Who Is Who statt auf ihrem Profil.",
-      "text_en": "New members land in the Who Is Who after registration instead of their profile."
-    },
-    {
-      "version": "8",
-      "datum": "2026-11-27",
-      "titel_de": "Verzeichnis nur für Mitglieder",
-      "titel_en": "Directory for members only",
-      "text_de": "Das Who Is Who ist nur noch für angemeldete Mitglieder sichtbar.",
-      "text_en": "The Who Is Who is now visible to logged-in members only."
     }
   ]
 }

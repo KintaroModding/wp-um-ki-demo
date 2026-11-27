@@ -15,6 +15,14 @@
       "titel_en": "Premium badge",
       "text_de": "Premium-Einträge zeigen im Who Is Who ein Abzeichen unter dem Namen.",
       "text_en": "Premium entries show a badge below the name in the Who Is Who."
+    },
+    {
+      "version": "3",
+      "datum": "2026-11-27",
+      "titel_de": "Community of Practice für Anwender",
+      "titel_en": "Community of Practice for users",
+      "text_de": "Anwender-Abo als Nachfolger der SUMMIT Card: eigene Registrierung, geschützter Bereich, Firmenlizenz per E-Mail-Domain, Freischaltung nach Zahlungseingang.",
+      "text_en": "User subscription as successor of the SUMMIT Card: own registration, protected area, company licence by e-mail domain, approval after payment."
     }
   ]
 }

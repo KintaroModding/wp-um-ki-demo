@@ -18,6 +18,9 @@
     "ort":            { "typ": "text",     "label": "Ort" },
     "webseite":       { "typ": "url",      "label": "Webseite" },
     "beschreibung":   { "typ": "textarea", "label": "Kurzbeschreibung" },
+    "first_name":     { "typ": "text",     "label": "Vorname", "pflicht": true },
+    "last_name":      { "typ": "text",     "label": "Nachname", "pflicht": true },
+    "position":       { "typ": "text",     "label": "Position im Unternehmen" },
     "datenschutz":    { "typ": "checkbox", "label": "Datenschutz", "pflicht": true,
                         "optionen": ["Ich habe die Datenschutzerklärung gelesen und willige ein."] },
     "agb":            { "typ": "checkbox", "label": "AGB", "pflicht": true,
@@ -51,6 +54,51 @@
     "details": ["ort", "profil_sprache", "beschreibung"],
     "pro_seite": 12
   },
+
+  "anwender": {
+    "titel": "Community of Practice „QM & KI beim betrieblichen eLearning Einsatz“",
+    "nachfolger_von": "eLearning SUMMIT Card",
+    "registrierung": [
+      "first_name", "last_name", "user_email", "user_password", "unternehmen", "position",
+      "datenschutz", "agb"
+    ],
+    "rollen": [
+      { "key": "anwender_einzel",      "name": "Anwender – Einzelperson",  "freischaltung": "admin" },
+      { "key": "anwender_unternehmen", "name": "Anwender – Unternehmen (Firmenlizenz)" }
+    ],
+    "rolle_ohne_lizenz": "anwender_einzel",
+    "rolle_mit_firmenlizenz": "anwender_unternehmen",
+    "bereich": {
+      "titel": "CoP & Mediathek",
+      "inhalte": [
+        "Mediathek: über 300 Best-Practice-Vorträge als Video",
+        "Monatliche Online-Formate: BarCamp, Remote Workshop, Expedition",
+        "Kongresstage „Wissenschaft trifft Praxis“ ohne Zusatzkosten",
+        "Austausch im F&E-Unternehmensnetzwerk",
+        "Neu: Arbeitsgruppe „QM & KI beim betrieblichen eLearning Einsatz“"
+      ]
+    }
+  },
+
+  "firmenlizenzen": [
+    { "firma": "Muster Bildung AG",      "domain": "muster-bildung.example", "gueltig_bis": "2027-12-31" },
+    { "firma": "Nordwerk Logistik GmbH", "domain": "nordwerk.example",       "gueltig_bis": "2027-06-30" }
+  ],
+
+  "anwender_mitglieder": [
+    { "login": "petra-schulz", "email": "petra.schulz@example.com", "rolle": "anwender_einzel",
+      "daten": { "first_name": "Petra", "last_name": "Schulz", "unternehmen": "Freie Trainerin",
+                 "position": "Trainerin für digitale Lernformate" } },
+    { "login": "jan-wagner", "email": "jan.wagner@muster-bildung.example", "rolle": "anwender_unternehmen",
+      "daten": { "first_name": "Jan", "last_name": "Wagner", "unternehmen": "Muster Bildung AG",
+                 "position": "Leitung Personalentwicklung" } },
+    { "login": "lea-hoffmann", "email": "lea.hoffmann@muster-bildung.example", "rolle": "anwender_unternehmen",
+      "daten": { "first_name": "Lea", "last_name": "Hoffmann", "unternehmen": "Muster Bildung AG",
+                 "position": "Qualitätsmanagement" } },
+    { "login": "mark-becker", "email": "mark.becker@example.com", "rolle": "anwender_einzel", "status": "wartet",
+      "daten": { "first_name": "Mark", "last_name": "Becker", "unternehmen": "Becker Consulting",
+                 "position": "Berater" } }
+  ],
 
   "mitglieder": [
     { "login": "lernwerk-nord", "rolle": "premium",

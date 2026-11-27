@@ -66,10 +66,23 @@ foreach ( $slugs as $core => $slug ) {
 // ---------------------------------------------------------------------------
 // 3. Roles.
 // ---------------------------------------------------------------------------
-$role_keys = array();
-foreach ( $daten['rollen'] as $rolle ) {
-	$key         = sanitize_key( $rolle['key'] );
-	$role_keys[] = $key;
+// Anbieter roles ($daten['rollen']) show in the Who Is Who; Anwender roles
+// ($daten['anwender']['rollen']) belong to the Community of Practice.
+// "freischaltung": "admin" = new accounts wait for approval (today's invoice process).
+$role_keys     = array();
+$anwender_keys = array();
+$alle_rollen   = $daten['rollen'];
+foreach ( isset( $daten['anwender']['rollen'] ) ? $daten['anwender']['rollen'] : array() as $r ) {
+	$r['_anwender'] = true;
+	$alle_rollen[]  = $r;
+}
+foreach ( $alle_rollen as $rolle ) {
+	$key = sanitize_key( $rolle['key'] );
+	if ( empty( $rolle['_anwender'] ) ) {
+		$role_keys[] = $key;
+	} else {
+		$anwender_keys[] = $key;
+	}
 	update_option(
 		"um_role_{$key}_meta",
 		array(
@@ -87,14 +100,17 @@ foreach ( $daten['rollen'] as $rolle ) {
 			'_um_can_view_all'               => 1,
 			'_um_can_make_private_profile'   => 0,
 			'_um_can_access_private_profile' => 0,
-			'_um_status'                     => 'approved',
+			'_um_status'                     => ( isset( $rolle['freischaltung'] ) && 'admin' === $rolle['freischaltung'] ) ? 'pending' : 'approved',
+			// Message for accounts that wait for approval (shown right after registration).
+			'_um_pending_action'             => 'show_message',
+			'_um_pending_message'            => isset( $rolle['nachricht_wartend'] ) ? $rolle['nachricht_wartend'] : 'Vielen Dank für Ihre Anmeldung! Sie erhalten in Kürze Ihre Rechnung. Nach Zahlungseingang schalten wir Ihren Zugang frei und informieren Sie per E-Mail.',
 			// After registration: own profile, or a page given as "nach_registrierung": "/path/".
 			'_um_auto_approve_act'           => empty( $rolle['nach_registrierung'] ) ? 'redirect_profile' : 'redirect_url',
 			'_um_auto_approve_url'           => empty( $rolle['nach_registrierung'] ) ? '' : home_url( $rolle['nach_registrierung'] ),
 		)
 	);
 }
-update_option( 'um_roles', $role_keys );
+update_option( 'um_roles', array_merge( $role_keys, $anwender_keys ) );
 wp_roles()->for_site(); // Reload roles so the new UM roles exist in this request.
 
 // ---------------------------------------------------------------------------
@@ -256,6 +272,114 @@ foreach ( $daten['mitglieder'] as $m ) {
 }
 
 // ---------------------------------------------------------------------------
+// 6b. Anwender: Community of Practice (successor of the SUMMIT Card).
+// ---------------------------------------------------------------------------
+$cop_register_url = home_url( '/cop-beitreten/' );
+$cop_area_url     = home_url( '/cop/' );
+if ( ! empty( $daten['anwender'] ) ) {
+	$a = $daten['anwender'];
+
+	// Own registration form. New accounts get the role without licence
+	// (waits for approval); the must-use plugin upgrades company domains.
+	$form_id = wp_insert_post(
+		array(
+			'post_type'   => 'um_form',
+			'post_status' => 'publish',
+			'post_title'  => 'Registrierung Community of Practice',
+		)
+	);
+	foreach ( UM()->config()->core_form_meta_all as $k => $v ) {
+		if ( 0 === strpos( $k, '_um_register_' ) ) {
+			update_post_meta( $form_id, $k, $v );
+		}
+	}
+	update_post_meta( $form_id, '_um_mode', 'register' );
+	update_post_meta( $form_id, '_um_custom_fields', demo_um_formular( $a['registrierung'], $felder ) );
+	update_post_meta( $form_id, '_um_register_use_custom_settings', 1 );
+	update_post_meta( $form_id, '_um_register_role', 'um_' . sanitize_key( $a['rolle_ohne_lizenz'] ) );
+	update_post_meta( $form_id, '_um_register_primary_btn_word', 'Der CoP beitreten' );
+	update_option( 'demo_anwender_form', $form_id );
+
+	$lizenz_liste = '';
+	foreach ( $daten['firmenlizenzen'] as $l ) {
+		$lizenz_liste .= '<li>' . esc_html( $l['firma'] ) . ' – E-Mail-Adressen <code>@' . esc_html( $l['domain'] ) . '</code></li>';
+	}
+	$titel = esc_html( $a['titel'] );
+	$alt   = esc_html( $a['nachfolger_von'] );
+	wp_insert_post(
+		array(
+			'post_type'    => 'page',
+			'post_status'  => 'publish',
+			'post_title'   => 'Der CoP beitreten',
+			'post_name'    => 'cop-beitreten',
+			'post_content' => "<!-- wp:paragraph --><p><strong>{$titel}</strong> – der Nachfolger der {$alt}.</p><!-- /wp:paragraph -->"
+				. '<!-- wp:paragraph --><p><strong>Firmenlizenz:</strong> Hat Ihr Unternehmen eine Firmenlizenz, registrieren Sie sich mit Ihrer Firmen-E-Mail-Adresse. Sie erhalten dann sofort Zugang. Alle anderen Anmeldungen schalten wir nach Zahlungseingang frei.</p><!-- /wp:paragraph -->'
+				. '<!-- wp:html --><details><summary>Firmen mit Lizenz (Demo)</summary><ul>' . $lizenz_liste . '</ul></details><!-- /wp:html -->'
+				. '<!-- wp:shortcode -->[ultimatemember form_id="' . (int) $form_id . '"]<!-- /wp:shortcode -->',
+		)
+	);
+
+	// Protected area: only Anwender roles see it.
+	$liste = '';
+	foreach ( $a['bereich']['inhalte'] as $i ) {
+		$liste .= '<li>' . esc_html( $i ) . '</li>';
+	}
+	$area_id = wp_insert_post(
+		array(
+			'post_type'    => 'page',
+			'post_status'  => 'publish',
+			'post_title'   => $a['bereich']['titel'],
+			'post_name'    => 'cop',
+			'post_content' => "<!-- wp:paragraph --><p>Willkommen in der {$titel}. Dieser Bereich ist nur für Mitglieder sichtbar.</p><!-- /wp:paragraph -->"
+				. '<!-- wp:list --><ul>' . $liste . '</ul><!-- /wp:list -->',
+		)
+	);
+	$access_roles = array();
+	foreach ( $anwender_keys as $k ) {
+		$access_roles[ 'um_' . $k ] = '1';
+	}
+	update_post_meta(
+		$area_id,
+		'um_content_restriction',
+		array(
+			'_um_custom_access_settings'     => '1',
+			'_um_accessible'                 => '2',
+			'_um_access_roles'               => $access_roles,
+			'_um_noaccess_action'            => '0',
+			'_um_restrict_by_custom_message' => '1',
+			'_um_restrict_custom_message'    => 'Dieser Bereich ist nur für Mitglieder der Community of Practice. <a href="' . esc_url( $cop_register_url ) . '">Jetzt beitreten</a>',
+			'_um_access_hide_from_queries'   => '0',
+		)
+	);
+
+	// Sample Anwender. "status": "wartet" = waits for approval (invoice not paid yet).
+	foreach ( isset( $daten['anwender_mitglieder'] ) ? $daten['anwender_mitglieder'] : array() as $m ) {
+		if ( username_exists( $m['login'] ) ) {
+			continue;
+		}
+		$user_id = wp_insert_user(
+			array(
+				'user_login'   => $m['login'],
+				'user_email'   => $m['email'],
+				'user_pass'    => wp_generate_password( 20 ),
+				'display_name' => trim( $m['daten']['first_name'] . ' ' . $m['daten']['last_name'] ),
+				'role'         => 'um_' . sanitize_key( $m['rolle'] ),
+			)
+		);
+		if ( is_wp_error( $user_id ) ) {
+			error_log( 'demo-setup: ' . $user_id->get_error_message() );
+			continue;
+		}
+		foreach ( $m['daten'] as $k => $val ) {
+			update_user_meta( $user_id, $k, $val );
+		}
+		$wartet = isset( $m['status'] ) && 'wartet' === $m['status'];
+		update_user_meta( $user_id, 'account_status', $wartet ? 'awaiting_admin_review' : 'approved' );
+		UM()->user()->remove_cache( $user_id );
+	}
+}
+
+// ---------------------------------------------------------------------------
 // 7. Start page and menu.
 // ---------------------------------------------------------------------------
 foreach ( array( 'sample-page' => 'page', 'hello-world' => 'post' ) as $slug => $type ) {
@@ -267,18 +391,39 @@ foreach ( array( 'sample-page' => 'page', 'hello-world' => 'post' ) as $slug => 
 
 $members_url  = home_url( '/who-is-who/' );
 $register_url = home_url( '/registrierung/' );
+$cop_title    = isset( $daten['anwender']['titel'] ) ? esc_html( $daten['anwender']['titel'] ) : '';
+$cop_alt      = isset( $daten['anwender']['nachfolger_von'] ) ? esc_html( $daten['anwender']['nachfolger_von'] ) : '';
 $start        = <<<HTML
 <!-- wp:heading {"level":1} -->
 <h1 class="wp-block-heading">{$daten['seite']['titel']}</h1>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>Diese Seite ist eine Demo. Sie läuft komplett im Browser – mit echtem WordPress und echtem Ultimate Member. Registrierung, Rollen und Verzeichnis sind aus einer einzigen Datei aufgebaut, die ein KI-Agent ändert.</p>
+<p>Diese Seite ist eine Demo. Sie läuft komplett im Browser – mit echtem WordPress und echtem Ultimate Member. Anbieter und Anwender nutzen ein gemeinsames System; die Rolle entscheidet, wer was sieht. Alles ist aus einer einzigen Datei aufgebaut, die ein KI-Agent ändert.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Für Anbieter: Who Is Who</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Eintrag im Verzeichnis der eLearning-Branche, als Basis- oder Premium-Profil.</p>
 <!-- /wp:paragraph -->
 <!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button -->
 <div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="{$members_url}">Zum Who Is Who</a></div>
 <!-- /wp:button --><!-- wp:button {"className":"is-style-outline"} -->
 <div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="{$register_url}">Profil anlegen</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Für Anwender: Community of Practice</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>{$cop_title} – der Nachfolger der {$cop_alt}. Mit Mediathek, Online-Formaten und Netzwerk. Firmenlizenz: Mitarbeiter erhalten mit ihrer Firmen-E-Mail sofort Zugang.</p>
+<!-- /wp:paragraph -->
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="{$cop_register_url}">Der CoP beitreten</a></div>
+<!-- /wp:button --><!-- wp:button {"className":"is-style-outline"} -->
+<div class="wp-block-button is-style-outline"><a class="wp-block-button__link wp-element-button" href="{$cop_area_url}">CoP &amp; Mediathek</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 HTML;
@@ -300,6 +445,7 @@ $links = array(
 	array( 'Start', home_url( '/' ) ),
 	array( $daten['verzeichnis']['titel'], $members_url ),
 	array( 'Profil anlegen', $register_url ),
+	array( 'Community of Practice', $cop_register_url ),
 	array( 'Anmelden', home_url( '/anmelden/' ) ),
 );
 $nav = '';

@@ -49,6 +49,10 @@ add_action(
 		if ( 'admin' === $als ) {
 			wp_set_current_user( 1 );
 			wp_set_auth_cookie( 1, true );
+		} elseif ( 'anwender' === $als && ( $u = get_user_by( 'login', 'jan-wagner' ) ) ) {
+			// Sample CoP member with a company licence.
+			wp_set_current_user( $u->ID );
+			wp_set_auth_cookie( $u->ID, true );
 		} else {
 			wp_clear_auth_cookie();
 			wp_set_current_user( 0 );
@@ -59,6 +63,8 @@ add_action(
 			'formular' => admin_url( 'post.php?post=' . (int) ( $forms['register'] ?? 0 ) . '&action=edit' ),
 			'rollen'   => admin_url( 'admin.php?page=um_roles' ),
 			'benutzer' => admin_url( 'users.php' ),
+			// Accounts that wait for approval (today: after the invoice is paid).
+			'freischaltungen' => admin_url( 'users.php?um_user_status=awaiting_admin_review' ),
 		);
 		$target = isset( $named[ $ziel ] ) ? $named[ $ziel ] : home_url( '/' . ltrim( $ziel, '/' ) );
 		wp_safe_redirect( $target );
@@ -93,6 +99,49 @@ add_action(
 		}
 	},
 	20
+);
+
+/**
+ * Company licence by e-mail domain (Community of Practice).
+ *
+ * A company buys one licence; all its employees may use it. Ultimate Member
+ * only knows single users, so the licence is matched by the e-mail domain:
+ * whoever registers with an address of a licensed company (demo-daten.json,
+ * "firmenlizenzen", still valid) gets the company role at once and is
+ * approved. Everyone else keeps the role without licence and waits for
+ * approval by an admin (today's invoice process).
+ *
+ * Runs at priority 20: Ultimate Member decides the status at priority 100,
+ * based on the role, so the role must be final before that.
+ */
+add_action(
+	'um_registration_complete',
+	function ( $user_id, $args, $form_data = null ) {
+		$daten   = demo_daten();
+		$form_id = isset( $form_data['form_id'] ) ? (int) $form_data['form_id'] : 0;
+		if ( empty( $daten['anwender'] ) || $form_id !== (int) get_option( 'demo_anwender_form' ) ) {
+			return;
+		}
+		$user = get_userdata( $user_id );
+		$name = trim( get_user_meta( $user_id, 'first_name', true ) . ' ' . get_user_meta( $user_id, 'last_name', true ) );
+		if ( $name ) {
+			wp_update_user( array( 'ID' => $user_id, 'display_name' => $name ) );
+		}
+		$domain = strtolower( substr( strrchr( $user->user_email, '@' ), 1 ) );
+		foreach ( isset( $daten['firmenlizenzen'] ) ? $daten['firmenlizenzen'] : array() as $lizenz ) {
+			$gueltig = empty( $lizenz['gueltig_bis'] ) || gmdate( 'Y-m-d' ) <= $lizenz['gueltig_bis'];
+			if ( $gueltig && strtolower( $lizenz['domain'] ) === $domain ) {
+				$user->set_role( 'um_' . sanitize_key( $daten['anwender']['rolle_mit_firmenlizenz'] ) );
+				update_user_meta( $user_id, 'unternehmen', $lizenz['firma'] );
+				update_user_meta( $user_id, 'demo_firmenlizenz', $lizenz['firma'] );
+				UM()->user()->remove_cache( $user_id );
+				um_fetch_user( $user_id ); // UM reads the status from the (new) role at priority 100.
+				break;
+			}
+		}
+	},
+	20,
+	3
 );
 
 /**

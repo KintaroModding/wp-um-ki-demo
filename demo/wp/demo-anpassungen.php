@@ -103,10 +103,13 @@ add_filter(
 	'um_ajax_get_members_data',
 	function ( $data, $user_id ) {
 		$user = get_userdata( $user_id );
-		if ( $user && in_array( 'um_premium', (array) $user->roles, true ) && ! empty( $data['display_name_html'] ) ) {
-			// Own line above the name, centered, never wraps (long company names wrapped it before).
-			$data['display_name_html'] = '<span class="demo-premium" style="display:table;margin:0 auto 6px;padding:2px 10px;border-radius:999px;background:#c9771a;color:#fff;font-size:12px;line-height:1.5;font-weight:600;white-space:nowrap;word-break:normal;overflow-wrap:normal">Premium</span>'
-				. $data['display_name_html'];
+		if ( $user && in_array( 'um_premium', (array) $user->roles, true ) ) {
+			// UM's slot right after the name block. The name itself is a flex row that
+			// never wraps, so the badge must not go inside display_name_html.
+			$badge = '<div class="demo-premium-row" style="text-align:center;margin:0 0 6px">'
+				. '<span class="demo-premium" style="display:inline-block;padding:2px 10px;border-radius:999px;background:#c9771a;color:#fff;font-size:12px;line-height:1.5;font-weight:600;white-space:nowrap">Premium</span>'
+				. '</div>';
+			$data['hook_just_after_name'] = ( isset( $data['hook_just_after_name'] ) ? $data['hook_just_after_name'] : '' ) . $badge;
 		}
 		return $data;
 	},

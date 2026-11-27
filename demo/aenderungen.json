@@ -23,6 +23,14 @@
       "titel_en": "Premium badge without line break",
       "text_de": "Das Abzeichen steht jetzt in einer eigenen Zeile über dem Namen und bricht nicht mehr um.",
       "text_en": "The badge now sits on its own line above the name and no longer wraps."
+    },
+    {
+      "version": "4",
+      "datum": "2026-11-27",
+      "titel_de": "Premium-Kennzeichen unter dem Namen",
+      "titel_en": "Premium badge below the name",
+      "text_de": "Das Abzeichen steht jetzt in einer eigenen Zeile unter dem Namen.",
+      "text_en": "The badge now sits on its own line below the name."
     }
   ]
 }

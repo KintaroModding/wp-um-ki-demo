@@ -169,6 +169,7 @@ add_filter(
 /**
  * Small badge with the current demo version, bottom right on every page.
  * It proves in the call that the newest version from GitHub is running.
+ * Only the number: the change texts in aenderungen.json stay internal.
  */
 add_action(
 	'wp_footer',
@@ -178,9 +179,8 @@ add_action(
 			return;
 		}
 		printf(
-			'<div style="position:fixed;right:12px;bottom:12px;z-index:9999;padding:6px 12px;border-radius:999px;background:#1e73be;color:#fff;font:600 13px/1.4 system-ui,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.2)">Demo-Stand %s · %s</div>',
-			esc_html( $stand['version'] ),
-			esc_html( $stand['titel_de'] )
+			'<div style="position:fixed;right:12px;bottom:12px;z-index:9999;padding:6px 12px;border-radius:999px;background:#1e73be;color:#fff;font:600 13px/1.4 system-ui,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.2)">Demo-Stand %s</div>',
+			esc_html( $stand['version'] )
 		);
 	}
 );

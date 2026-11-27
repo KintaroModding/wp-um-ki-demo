@@ -31,13 +31,7 @@ window.TEXTE = {
     "tb.restart.title": "Lädt die neueste Version aus dem Projekt",
     "ov.title": "WordPress startet …",
     "ov.text": "WordPress, Ultimate Member und die Demo-Daten werden im Browser aufgebaut. Das dauert beim ersten Mal etwa 20 bis 40 Sekunden.",
-    "ov.error": "Die Demo konnte nicht starten",
-    "log.title": "Änderungsprotokoll",
-    "facts.title": "Gut zu wissen",
-    "facts.1": "Alles läuft im Browser. Es gibt keinen Server und keine echten Daten.",
-    "facts.2": "Jeder Neustart baut die Seite frisch aus dem aktuellen Stand im Projekt.",
-    "facts.3": "Alle Einträge im Verzeichnis sind erfunden.",
-    "facts.4": "Die Admin-Ansicht ist ohne Passwort, nur für diese Demo."
+    "ov.error": "Die Demo konnte nicht starten"
   },
   en: {
     "meta.title": "Live demo: Who Is Who with Ultimate Member",
@@ -67,12 +61,6 @@ window.TEXTE = {
     "tb.restart.title": "Loads the newest version from the project",
     "ov.title": "WordPress is starting …",
     "ov.text": "WordPress, Ultimate Member and the demo data are being built in the browser. The first time takes about 20 to 40 seconds.",
-    "ov.error": "The demo could not start",
-    "log.title": "Change log",
-    "facts.title": "Good to know",
-    "facts.1": "Everything runs in the browser. There is no server and no real data.",
-    "facts.2": "Every restart builds the site fresh from the current state of the project.",
-    "facts.3": "All directory entries are made up.",
-    "facts.4": "The admin view needs no password, only for this demo."
+    "ov.error": "The demo could not start"
   }
 };

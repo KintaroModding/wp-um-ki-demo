@@ -59,20 +59,6 @@
     .overlay.error .spinner { display: none; }
     .overlay.error h3 { color: #b42318; }
 
-    .below { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0 48px; }
-    @media (max-width: 860px) { .below { grid-template-columns: 1fr; } }
-    .log { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
-    .log li { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: baseline; }
-    .log .v {
-      grid-row: span 2; font-weight: 700; font-size: 14px; color: #fff; background: var(--accent);
-      border-radius: 8px; padding: 2px 8px;
-    }
-    .log li:not(:first-child) .v { background: var(--surface-2); color: var(--muted); }
-    .log b { font-size: 16px; }
-    .log span { color: var(--muted); font-size: 15px; }
-    .log small { color: var(--muted); font-size: 13px; font-family: var(--mono); }
-    .facts { margin: 0; padding-left: 20px; color: var(--muted); font-size: 16px; }
-    .facts li { margin: 4px 0; }
     .stand {
       font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
       background: var(--accent-soft); color: var(--accent-ink); white-space: nowrap;
@@ -140,22 +126,7 @@
         </div>
       </div>
     </div>
-
-    <div class="below">
-      <div class="card">
-        <h3 data-t="log.title">Änderungsprotokoll</h3>
-        <ol class="log" id="log"></ol>
-      </div>
-      <div class="card">
-        <h3 data-t="facts.title">Gut zu wissen</h3>
-        <ul class="facts">
-          <li data-t="facts.1">Alles läuft im Browser. Es gibt keinen Server und keine echten Daten.</li>
-          <li data-t="facts.2">Jeder Neustart baut die Seite frisch aus dem aktuellen Stand im Projekt.</li>
-          <li data-t="facts.3">Alle Einträge im Verzeichnis sind erfunden.</li>
-          <li data-t="facts.4">Die Admin-Ansicht ist ohne Passwort, nur für diese Demo.</li>
-        </ul>
-      </div>
-    </div>
+    <div style="height:48px"></div>
   </main>
 
   <script src="texte.js"></script>
@@ -191,22 +162,13 @@
       return bp;
     }
 
+    // Only the version number is shown (top right), so a live change is visible.
+    // The change texts in aenderungen.json stay internal.
     function renderLog() {
       if (!log) return;
-      const list = document.getElementById("log");
-      const entries = [...log.eintraege].reverse();
-      list.innerHTML = "";
-      for (const e of entries) {
-        const li = document.createElement("li");
-        const l = lang() === "de" ? "de" : "en";
-        li.innerHTML = `<span class="v">v${e.version}</span><b></b><span></span>`;
-        li.querySelector("b").textContent = e["titel_" + l] || e.titel_de;
-        li.querySelector("span:last-child").textContent = (e["text_" + l] || e.text_de) + " · " + e.datum;
-        list.appendChild(li);
-      }
-      document.getElementById("stand").textContent = "v" + entries[0].version;
+      const last = log.eintraege[log.eintraege.length - 1];
+      document.getElementById("stand").textContent = "v" + last.version;
     }
-    document.addEventListener("langchange", renderLog);
 
     function setActive(btn) {
       views.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));

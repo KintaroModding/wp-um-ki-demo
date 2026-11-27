@@ -3,17 +3,238 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Live-Demo</title>
+  <title>Live-Demo: Who Is Who mit Ultimate Member</title>
+  <meta name="description" content="Echtes WordPress mit Ultimate Member im Browser, geändert von einem KI-Agenten.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    .demo-head { padding: 32px 0 16px; }
+    .demo-head h1 { font-size: clamp(28px, 4vw, 40px); }
+    .demo-head .lead { margin-bottom: 16px; }
+
+    .cycle { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; padding: 0; list-style: none; }
+    .cycle li {
+      display: flex; align-items: center; gap: 8px; padding: 6px 14px 6px 6px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 999px; font-size: 15px;
+    }
+    .cycle .n {
+      width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+      background: var(--accent); color: #fff; font-weight: 700; font-size: 13px;
+    }
+
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; }
+    .toolbar .group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .toolbar .label { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-right: 2px; }
+    .toolbar .sep { width: 1px; height: 28px; background: var(--line); margin: 0 6px; }
+    .view {
+      font: inherit; font-size: 15px; font-weight: 500; padding: 7px 14px; border-radius: 10px; cursor: pointer;
+      border: 1px solid var(--line); background: var(--surface); color: var(--text);
+    }
+    .view:hover:not(:disabled) { border-color: var(--accent); }
+    .view[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .view.admin { border-style: dashed; }
+    .view:disabled { opacity: .45; cursor: default; }
+    .restart { margin-left: auto; }
+
+    .stage {
+      position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line);
+      box-shadow: var(--shadow); background: #fff;
+    }
+    .stage iframe { display: block; width: 100%; height: 72vh; min-height: 520px; border: 0; }
+    .overlay {
+      position: absolute; inset: 0; display: grid; place-items: center; background: var(--surface);
+      text-align: center; padding: 24px;
+    }
+    .overlay[hidden] { display: none; }
+    .overlay .box { max-width: 520px; }
+    .overlay .spinner {
+      width: 44px; height: 44px; margin: 0 auto 16px; border-radius: 50%;
+      border: 4px solid var(--accent-soft); border-top-color: var(--accent); animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .overlay .time { font-family: var(--mono); color: var(--muted); font-size: 15px; }
+    .overlay.error .spinner { display: none; }
+    .overlay.error h3 { color: #b42318; }
+
+    .below { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0 48px; }
+    @media (max-width: 860px) { .below { grid-template-columns: 1fr; } }
+    .log { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+    .log li { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: baseline; }
+    .log .v {
+      grid-row: span 2; font-weight: 700; font-size: 14px; color: #fff; background: var(--accent);
+      border-radius: 8px; padding: 2px 8px;
+    }
+    .log li:not(:first-child) .v { background: var(--surface-2); color: var(--muted); }
+    .log b { font-size: 16px; }
+    .log span { color: var(--muted); font-size: 15px; }
+    .log small { color: var(--muted); font-size: 13px; font-family: var(--mono); }
+    .facts { margin: 0; padding-left: 20px; color: var(--muted); font-size: 16px; }
+    .facts li { margin: 4px 0; }
+    .stand {
+      font-size: 13px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+      background: var(--accent-soft); color: var(--accent-ink); white-space: nowrap;
+    }
+  </style>
 </head>
 <body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../" data-t="nav.brand">WordPress + KI</a>
+      <nav class="chapters">
+        <a href="../erklaerung/"><span class="num">1</span><span data-t="nav.tour">Rundgang</span></a>
+        <a href="./" class="active"><span class="num">2</span><span data-t="nav.demo">Live-Demo</span></a>
+      </nav>
+      <span class="stand" id="stand">v–</span>
+      <div class="lang-switch" aria-label="Sprache"></div>
+    </div>
+  </header>
+
   <main>
-    <section class="chapter" style="display:flex;flex-direction:column;justify-content:center">
-      <span class="kicker">Teil 2 · In Arbeit</span>
-      <h1>Live-Demo</h1>
-      <p class="lead">Diese Seite wird gerade gebaut.</p>
-      <p><a class="btn ghost" href="../">← Zur Startseite</a></p>
+    <section class="demo-head">
+      <span class="kicker" data-t="head.kicker">Teil 2 · Live-Demo</span>
+      <h1 data-t="head.title">Who Is Who – nachgebaut mit Ultimate Member</h1>
+      <p class="lead" data-t="head.lead">Ein echtes WordPress mit echtem Ultimate Member, direkt hier im Browser. Registrierung, Rollen und Verzeichnis entstehen aus Dateien im Projekt. Ein KI-Agent ändert diese Dateien – wenige Minuten später ist die neue Version hier.</p>
+      <ol class="cycle">
+        <li><span class="n">1</span><span data-t="cycle.1">Wunsch in normaler Sprache</span></li>
+        <li><span class="n">2</span><span data-t="cycle.2">KI-Agent ändert die Datei</span></li>
+        <li><span class="n">3</span><span data-t="cycle.3">Prüfen und hochladen</span></li>
+        <li><span class="n">4</span><span data-t="cycle.4">Demo neu starten</span></li>
+      </ol>
     </section>
+
+    <div class="toolbar" role="toolbar">
+      <div class="group">
+        <span class="label" data-t="tb.visitor">Besucher</span>
+        <button class="view" data-path="/?demo_als=besucher&ziel=/" data-t="tb.home" disabled>Startseite</button>
+        <button class="view" data-path="/?demo_als=besucher&ziel=/who-is-who/" data-t="tb.dir" disabled>Who Is Who</button>
+        <button class="view" data-path="/?demo_als=besucher&ziel=/registrierung/" data-t="tb.reg" disabled>Registrierung</button>
+      </div>
+      <span class="sep" aria-hidden="true"></span>
+      <div class="group">
+        <span class="label" data-t="tb.admin">Admin</span>
+        <button class="view admin" data-path="/?demo_als=admin&ziel=formular" data-t="tb.form" disabled>Formular</button>
+        <button class="view admin" data-path="/?demo_als=admin&ziel=benutzer" data-t="tb.users" disabled>Mitglieder</button>
+        <button class="view admin" data-path="/?demo_als=admin&ziel=rollen" data-t="tb.roles" disabled>Rollen</button>
+      </div>
+      <button class="view restart" id="restart" data-t="tb.restart" data-t-attr="title:tb.restart.title">↻ Neu starten</button>
+    </div>
+
+    <div class="stage">
+      <iframe id="wp" title="WordPress Demo" allow="clipboard-read; clipboard-write"></iframe>
+      <div class="overlay" id="overlay">
+        <div class="box">
+          <div class="spinner" aria-hidden="true"></div>
+          <h3 id="ov-title" data-t="ov.title">WordPress startet …</h3>
+          <p id="ov-text" data-t="ov.text">WordPress, Ultimate Member und die Demo-Daten werden im Browser aufgebaut. Das dauert beim ersten Mal etwa 20 bis 40 Sekunden.</p>
+          <p class="time" id="ov-time">0 s</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="below">
+      <div class="card">
+        <h3 data-t="log.title">Änderungsprotokoll</h3>
+        <ol class="log" id="log"></ol>
+      </div>
+      <div class="card">
+        <h3 data-t="facts.title">Gut zu wissen</h3>
+        <ul class="facts">
+          <li data-t="facts.1">Alles läuft im Browser. Es gibt keinen Server und keine echten Daten.</li>
+          <li data-t="facts.2">Jeder Neustart baut die Seite frisch aus dem aktuellen Stand im Projekt.</li>
+          <li data-t="facts.3">Alle Einträge im Verzeichnis sind erfunden.</li>
+          <li data-t="facts.4">Die Admin-Ansicht ist ohne Passwort, nur für diese Demo.</li>
+        </ul>
+      </div>
+    </div>
   </main>
+
+  <script src="texte.js"></script>
+  <script src="../assets/i18n.js"></script>
+  <script type="module">
+    import { startPlaygroundWeb } from "https://playground.wordpress.net/client/index.js";
+
+    const iframe = document.getElementById("wp");
+    const overlay = document.getElementById("overlay");
+    const ovTime = document.getElementById("ov-time");
+    const views = document.querySelectorAll(".view[data-path]");
+    let log = null;
+
+    const lang = () => document.documentElement.lang || "de";
+    const t = (key) => (window.TEXTE[lang()] || {})[key] || window.TEXTE.de[key] || key;
+
+    // Fetch a file from this site, never from the cache: every start uses the newest push.
+    async function fetchText(url) {
+      const res = await fetch(url, { cache: "no-store" });
+      if (!res.ok) throw new Error(url + " → HTTP " + res.status);
+      return res.text();
+    }
+
+    // Load the blueprint and inline its relative files, so Playground needs no CORS.
+    async function loadBlueprint() {
+      const bp = JSON.parse(await fetchText("blueprint.json"));
+      for (const step of bp.steps) {
+        const d = step.data;
+        if (d && d.resource === "url" && !/^https?:/i.test(d.url)) {
+          step.data = { resource: "literal", name: d.url.split("/").pop(), contents: await fetchText(d.url) };
+        }
+      }
+      return bp;
+    }
+
+    function renderLog() {
+      if (!log) return;
+      const list = document.getElementById("log");
+      const entries = [...log.eintraege].reverse();
+      list.innerHTML = "";
+      for (const e of entries) {
+        const li = document.createElement("li");
+        const l = lang() === "de" ? "de" : "en";
+        li.innerHTML = `<span class="v">v${e.version}</span><b></b><span></span>`;
+        li.querySelector("b").textContent = e["titel_" + l] || e.titel_de;
+        li.querySelector("span:last-child").textContent = (e["text_" + l] || e.text_de) + " · " + e.datum;
+        list.appendChild(li);
+      }
+      document.getElementById("stand").textContent = "v" + entries[0].version;
+    }
+    document.addEventListener("langchange", renderLog);
+
+    function setActive(btn) {
+      views.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+    }
+
+    async function start() {
+      const t0 = Date.now();
+      const timer = setInterval(() => { ovTime.textContent = Math.round((Date.now() - t0) / 1000) + " s"; }, 500);
+      try {
+        log = JSON.parse(await fetchText("aenderungen.json"));
+        renderLog();
+        const blueprint = await loadBlueprint();
+        const client = await startPlaygroundWeb({
+          iframe,
+          remoteUrl: "https://playground.wordpress.net/remote.html",
+          blueprint,
+        });
+        await client.isReady();
+        views.forEach((b) => {
+          b.disabled = false;
+          b.addEventListener("click", async () => { setActive(b); await client.goTo(b.dataset.path); });
+        });
+        setActive(views[0]);
+        overlay.hidden = true;
+      } catch (err) {
+        console.error(err);
+        overlay.classList.add("error");
+        document.getElementById("ov-title").textContent = t("ov.error");
+        document.getElementById("ov-text").textContent = String(err && err.message || err);
+      } finally {
+        clearInterval(timer);
+      }
+    }
+
+    document.getElementById("restart").addEventListener("click", () => location.reload());
+    start();
+  </script>
 </body>
 </html>

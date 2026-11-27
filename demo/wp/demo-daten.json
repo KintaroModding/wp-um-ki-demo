@@ -1,0 +1,85 @@
+{
+  "seite": {
+    "titel": "Who Is Who im eLearning",
+    "untertitel": "Demo: Anbieter- und Freelancer-Verzeichnis mit Ultimate Member"
+  },
+
+  "felder": {
+    "user_email":     { "typ": "email",    "label": "E-Mail", "pflicht": true },
+    "user_password":  { "typ": "password", "label": "Passwort", "pflicht": true },
+    "kontotyp":       { "typ": "radio",    "label": "Kontotyp", "pflicht": true,
+                        "optionen": ["eLearning Dienstleister", "Freelancer"] },
+    "profil_sprache": { "typ": "checkbox", "label": "Sprache des Profils", "pflicht": true,
+                        "optionen": ["Deutsch", "Englisch"] },
+    "profil_typ":     { "typ": "radio",    "label": "Profil", "pflicht": true,
+                        "optionen": ["Basis-Profil", "Premium-Profil"],
+                        "hilfe": "Premium-Profile erscheinen mit Logo und ausführlicher Beschreibung." },
+    "unternehmen":    { "typ": "text",     "label": "Unternehmensname", "pflicht": true },
+    "ort":            { "typ": "text",     "label": "Ort" },
+    "webseite":       { "typ": "url",      "label": "Webseite" },
+    "beschreibung":   { "typ": "textarea", "label": "Kurzbeschreibung" },
+    "datenschutz":    { "typ": "checkbox", "label": "Datenschutz", "pflicht": true,
+                        "optionen": ["Ich habe die Datenschutzerklärung gelesen und willige ein."] },
+    "agb":            { "typ": "checkbox", "label": "AGB", "pflicht": true,
+                        "optionen": ["Ich habe die AGB gelesen und willige ein."] }
+  },
+
+  "registrierung": [
+    "user_email", "user_password", "kontotyp", "profil_sprache", "profil_typ",
+    "unternehmen", "datenschutz", "agb"
+  ],
+
+  "profil": [
+    "unternehmen", "kontotyp", "profil_sprache", "ort", "webseite", "beschreibung"
+  ],
+
+  "rollen": [
+    { "key": "basis",   "name": "Basis-Profil" },
+    { "key": "premium", "name": "Premium-Profil" }
+  ],
+
+  "rolle_nach_profil": {
+    "Basis-Profil": "basis",
+    "Premium-Profil": "premium"
+  },
+
+  "verzeichnis": {
+    "titel": "Who Is Who",
+    "sichtbar_fuer": "alle",
+    "filter": ["kontotyp", "profil_sprache", "profil_typ"],
+    "unter_dem_namen": ["kontotyp"],
+    "details": ["ort", "profil_sprache", "beschreibung"],
+    "pro_seite": 12
+  },
+
+  "mitglieder": [
+    { "login": "lernwerk-nord", "rolle": "premium",
+      "daten": { "unternehmen": "Lernwerk Nord GmbH", "kontotyp": "eLearning Dienstleister",
+                 "profil_sprache": ["Deutsch"], "profil_typ": "Premium-Profil", "ort": "Hamburg",
+                 "beschreibung": "Lernplattformen und Autorentools für den Mittelstand." } },
+    { "login": "didaktik-studio", "rolle": "basis",
+      "daten": { "unternehmen": "Didaktik & Medien Studio", "kontotyp": "eLearning Dienstleister",
+                 "profil_sprache": ["Deutsch", "Englisch"], "profil_typ": "Basis-Profil", "ort": "Köln",
+                 "beschreibung": "Erklärvideos und interaktive Lernmodule." } },
+    { "login": "anna-berger", "rolle": "premium",
+      "daten": { "unternehmen": "Anna Berger E-Learning Design", "kontotyp": "Freelancer",
+                 "profil_sprache": ["Deutsch"], "profil_typ": "Premium-Profil", "ort": "München",
+                 "beschreibung": "Instructional Design und Storyboards." } },
+    { "login": "clear-course", "rolle": "premium",
+      "daten": { "unternehmen": "Clear Course Ltd.", "kontotyp": "eLearning Dienstleister",
+                 "profil_sprache": ["Englisch"], "profil_typ": "Premium-Profil", "ort": "London",
+                 "beschreibung": "Compliance training for international teams." } },
+    { "login": "mikrolernen-mueller", "rolle": "basis",
+      "daten": { "unternehmen": "Mikrolernen Müller", "kontotyp": "Freelancer",
+                 "profil_sprache": ["Deutsch"], "profil_typ": "Basis-Profil", "ort": "Leipzig",
+                 "beschreibung": "Microlearning-Formate für Vertrieb und Service." } },
+    { "login": "blended-partner", "rolle": "premium",
+      "daten": { "unternehmen": "Blended Learning Partner AG", "kontotyp": "eLearning Dienstleister",
+                 "profil_sprache": ["Deutsch", "Englisch"], "profil_typ": "Premium-Profil", "ort": "Zürich",
+                 "beschreibung": "Blended-Learning-Konzepte und LMS-Einführung." } },
+    { "login": "tom-schreiber", "rolle": "basis",
+      "daten": { "unternehmen": "Tom Schreiber Moodle-Support", "kontotyp": "Freelancer",
+                 "profil_sprache": ["Deutsch", "Englisch"], "profil_typ": "Basis-Profil", "ort": "Berlin",
+                 "beschreibung": "Moodle-Einrichtung, Updates und Schulungen." } }
+  ]
+}

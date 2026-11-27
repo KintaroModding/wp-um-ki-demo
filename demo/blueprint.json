@@ -1,0 +1,25 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "Who Is Who - Ultimate Member demo",
+    "author": "KintaroModding",
+    "description": "WordPress + Ultimate Member, built from demo-daten.json. Relative URLs are resolved by the demo page (or by tools/inline-blueprint.mjs for local tests)."
+  },
+  "landingPage": "/",
+  "preferredVersions": { "php": "8.3", "wp": "latest" },
+  "features": { "networking": true },
+  "steps": [
+    {
+      "step": "installPlugin",
+      "pluginData": { "resource": "wordpress.org/plugins", "slug": "ultimate-member" },
+      "options": { "activate": true }
+    },
+    { "step": "setSiteLanguage", "language": "de_DE" },
+    { "step": "mkdir", "path": "/wordpress/demo" },
+    { "step": "writeFile", "path": "/wordpress/demo/demo-daten.json", "data": { "resource": "url", "url": "wp/demo-daten.json" } },
+    { "step": "writeFile", "path": "/wordpress/demo/aenderungen.json", "data": { "resource": "url", "url": "aenderungen.json" } },
+    { "step": "writeFile", "path": "/wordpress/demo/demo-setup.php", "data": { "resource": "url", "url": "wp/demo-setup.php" } },
+    { "step": "writeFile", "path": "/wordpress/wp-content/mu-plugins/demo-anpassungen.php", "data": { "resource": "url", "url": "wp/demo-anpassungen.php" } },
+    { "step": "runPHP", "code": "<?php require '/wordpress/demo/demo-setup.php';" }
+  ]
+}

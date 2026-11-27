@@ -1,0 +1,5 @@
+# Cloudflare Pages headers.
+# The demo files must never come from a cache: every restart must load the newest push.
+/demo/*
+  Cache-Control: no-cache
+  Access-Control-Allow-Origin: *

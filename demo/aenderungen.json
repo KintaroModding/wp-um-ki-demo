@@ -47,6 +47,14 @@
       "titel_en": "Profile language: French",
       "text_de": "Neue Option „Französisch“ bei der Sprache des Profils.",
       "text_en": "New option “French” for the profile language."
+    },
+    {
+      "version": "7",
+      "datum": "2026-11-27",
+      "titel_de": "Nach Registrierung ins Verzeichnis",
+      "titel_en": "After registration: to the directory",
+      "text_de": "Neue Mitglieder landen nach der Registrierung im Who Is Who statt auf ihrem Profil.",
+      "text_en": "New members land in the Who Is Who after registration instead of their profile."
     }
   ]
 }

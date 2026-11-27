@@ -34,9 +34,9 @@
   ],
 
   "rollen": [
-    { "key": "basis",   "name": "Basis-Profil" },
-    { "key": "premium", "name": "Premium-Profil" },
-    { "key": "partner", "name": "Partner-Profil" }
+    { "key": "basis",   "name": "Basis-Profil",   "nach_registrierung": "/who-is-who/" },
+    { "key": "premium", "name": "Premium-Profil", "nach_registrierung": "/who-is-who/" },
+    { "key": "partner", "name": "Partner-Profil", "nach_registrierung": "/who-is-who/" }
   ],
 
   "rolle_nach_profil": {

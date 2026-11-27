@@ -15,6 +15,7 @@
                         "optionen": ["Basis-Profil", "Premium-Profil"],
                         "hilfe": "Premium-Profile erscheinen mit Logo und ausführlicher Beschreibung." },
     "unternehmen":    { "typ": "text",     "label": "Unternehmensname", "pflicht": true },
+    "telefon":        { "typ": "tel",      "label": "Telefon" },
     "ort":            { "typ": "text",     "label": "Ort" },
     "webseite":       { "typ": "url",      "label": "Webseite" },
     "beschreibung":   { "typ": "textarea", "label": "Kurzbeschreibung" },
@@ -26,11 +27,11 @@
 
   "registrierung": [
     "user_email", "user_password", "kontotyp", "profil_sprache", "profil_typ",
-    "unternehmen", "datenschutz", "agb"
+    "unternehmen", "telefon", "datenschutz", "agb"
   ],
 
   "profil": [
-    "unternehmen", "kontotyp", "profil_sprache", "ort", "webseite", "beschreibung"
+    "unternehmen", "kontotyp", "profil_sprache", "ort", "webseite", "beschreibung", "telefon"
   ],
 
   "rollen": [

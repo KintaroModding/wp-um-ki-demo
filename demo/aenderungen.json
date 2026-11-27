@@ -7,6 +7,14 @@
       "titel_en": "Starting point",
       "text_de": "Registrierung und Who-Is-Who-Verzeichnis, nachgebaut mit Ultimate Member.",
       "text_en": "Registration and Who Is Who directory, rebuilt with Ultimate Member."
+    },
+    {
+      "version": "2",
+      "datum": "2026-11-27",
+      "titel_de": "Feld Telefon",
+      "titel_en": "Phone field",
+      "text_de": "Neues Feld „Telefon“ in der Registrierung (nach Unternehmensname) und im Profil.",
+      "text_en": "New field “Phone” in the registration form (after company name) and in the profile."
     }
   ]
 }

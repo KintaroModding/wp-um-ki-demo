@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WordPress + KI-Agent</title>
+  <meta name="description" content="Proof of Concept: WordPress und Ultimate Member, verwaltet mit einem KI-Agenten.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <style>
+    .start { min-height: calc(100vh - 56px); display: flex; flex-direction: column; justify-content: center; padding: 48px 0; }
+    .entry { display: flex; flex-direction: column; gap: 12px; text-decoration: none; color: var(--text); transition: border-color .15s; }
+    .entry:hover { border-color: var(--accent); }
+    .entry .step { font-size: 14px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+    .entry h2 { font-size: 26px; margin: 0; }
+    .entry .go { margin-top: auto; font-weight: 600; color: var(--accent); }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./" data-t="nav.brand">WordPress + KI</a>
+      <span style="flex:1"></span>
+      <div class="lang-switch" aria-label="Sprache"></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="start">
+      <span class="kicker" data-t="kicker">Proof of Concept</span>
+      <h1 data-t="title">WordPress und Ultimate Member, verwaltet mit einem KI-Agenten</h1>
+      <p class="lead" data-t="lead">Zwei Teile: erst die gemeinsame Grundlage, dann eine echte WordPress-Seite, die wir live ändern.</p>
+      <div class="grid cols-3" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+        <a class="card entry" href="erklaerung/">
+          <span class="step" data-t="e1.step">Teil 1</span>
+          <h2 data-t="e1.title">Rundgang</h2>
+          <p data-t="e1.text">WordPress, Ultimate Member und die drei Wege, über die ein KI-Agent beides verwaltet.</p>
+          <span class="go" data-t="e1.go">Öffnen →</span>
+        </a>
+        <a class="card entry" href="demo/">
+          <span class="step" data-t="e2.step">Teil 2</span>
+          <h2 data-t="e2.title">Live-Demo</h2>
+          <p data-t="e2.text">Ein echtes WordPress mit Ultimate Member im Browser. Änderungen per KI-Agent, wenige Minuten später online.</p>
+          <span class="go" data-t="e2.go">Öffnen →</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.TEXTE = {
+      de: {
+        "meta.title": "WordPress + KI-Agent",
+        "nav.brand": "WordPress + KI",
+        "kicker": "Proof of Concept",
+        "title": "WordPress und Ultimate Member, verwaltet mit einem KI-Agenten",
+        "lead": "Zwei Teile: erst die gemeinsame Grundlage, dann eine echte WordPress-Seite, die wir live ändern.",
+        "e1.step": "Teil 1", "e1.title": "Rundgang",
+        "e1.text": "WordPress, Ultimate Member und die drei Wege, über die ein KI-Agent beides verwaltet.",
+        "e1.go": "Öffnen →",
+        "e2.step": "Teil 2", "e2.title": "Live-Demo",
+        "e2.text": "Ein echtes WordPress mit Ultimate Member im Browser. Änderungen per KI-Agent, wenige Minuten später online.",
+        "e2.go": "Öffnen →"
+      },
+      en: {
+        "meta.title": "WordPress + AI agent",
+        "nav.brand": "WordPress + AI",
+        "kicker": "Proof of concept",
+        "title": "WordPress and Ultimate Member, managed with an AI agent",
+        "lead": "Two parts: first the common ground, then a real WordPress site that we change live.",
+        "e1.step": "Part 1", "e1.title": "Tour",
+        "e1.text": "WordPress, Ultimate Member and the three ways an AI agent manages both.",
+        "e1.go": "Open →",
+        "e2.step": "Part 2", "e2.title": "Live demo",
+        "e2.text": "A real WordPress with Ultimate Member in the browser. Changes by an AI agent, online a few minutes later.",
+        "e2.go": "Open →"
+      }
+    };
+  </script>
+  <script src="assets/i18n.js"></script>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WordPress, Ultimate Member und KI-Agent</title>
+  <meta name="description" content="Kurzer Rundgang: WordPress, Ultimate Member und wie ein KI-Agent beides verwaltet.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+  <style>
+    /* ---------- Hero ---------- */
+    .hero { display: flex; flex-direction: column; justify-content: center; }
+    .agenda { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 12px; max-width: 760px; }
+    .agenda a {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 20px; background: var(--surface); border: 1px solid var(--line);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      color: var(--text); text-decoration: none; font-weight: 500;
+    }
+    .agenda a:hover { border-color: var(--accent); }
+    .agenda .num {
+      flex: none; width: 34px; height: 34px; border-radius: 50%;
+      display: grid; place-items: center; background: var(--accent); color: #fff; font-weight: 700;
+    }
+    .agenda small { display: block; color: var(--muted); font-weight: 400; font-size: 15px; }
+    .hint-keys { margin-top: 24px; color: var(--muted); font-size: 15px; }
+    .hint-keys kbd {
+      font-family: var(--mono); font-size: 13px; padding: 2px 6px;
+      border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px; background: var(--surface);
+    }
+
+    /* ---------- Chapter 1: WordPress stack ---------- */
+    .stack { display: grid; gap: 10px; max-width: 860px; }
+    .stack .layer {
+      border-radius: var(--radius); padding: 16px 20px; border: 1px solid var(--line);
+      background: var(--surface); box-shadow: var(--shadow);
+      display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    }
+    .stack .layer b { font-size: 19px; }
+    .stack .layer span { color: var(--muted); font-size: 16px; }
+    .stack .site { background: var(--text); color: #fff; border-color: var(--text); }
+    .stack .site span { color: #c9d2de; }
+    .stack .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .stack .row3 .layer { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .stack .plugins { border: 2px solid var(--accent); background: var(--accent-soft); }
+    .stack .plugins .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .chip {
+      display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 14px;
+      background: var(--surface); border: 1px solid var(--line); color: var(--text);
+    }
+    .chip.um { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .stack .core { background: var(--surface-2); }
+    .stack .db { background: var(--warm-soft); border-color: #efd4b0; }
+    @media (max-width: 760px) { .stack .row3 { grid-template-columns: 1fr; } }
+
+    /* ---------- Chapter 2: member journey ---------- */
+    .journey {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; margin: 0 0 36px;
+      counter-reset: step;
+    }
+    .journey li { list-style: none; position: relative; padding: 0 8px; text-align: center; }
+    .journey li::before {
+      counter-increment: step; content: counter(step);
+      display: grid; place-items: center; margin: 0 auto 10px;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent); color: #fff; font-weight: 700; position: relative; z-index: 1;
+    }
+    .journey li::after {
+      content: ""; position: absolute; top: 22px; left: 50%; width: 100%; height: 3px;
+      background: var(--accent-soft);
+    }
+    .journey li:last-child::after { display: none; }
+    .journey b { display: block; font-size: 17px; }
+    .journey span { display: block; color: var(--muted); font-size: 15px; }
+    .journey-wrap { padding: 0; margin: 0; }
+    @media (max-width: 760px) {
+      .journey { grid-template-columns: 1fr; gap: 14px; }
+      .journey li { display: grid; grid-template-columns: 44px 1fr; gap: 12px; text-align: left; padding: 0; }
+      .journey li::before { margin: 0; grid-row: span 2; }
+      .journey li::after { display: none; }
+    }
+
+    /* ---------- Chapter 3: table ---------- */
+    .table-wrap { overflow-x: auto; border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); font-size: 16px; }
+    th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { background: var(--surface-2); font-size: 14px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+    tr:last-child td { border-bottom: 0; }
+    td:first-child { font-weight: 600; white-space: nowrap; }
+    td .sub { display: block; color: var(--muted); font-weight: 400; font-size: 14px; white-space: normal; }
+
+    /* ---------- Chapter 4: AI agent ---------- */
+    .flow {
+      display: grid; grid-template-columns: 1fr auto 1.2fr auto 1fr; align-items: center; gap: 12px;
+      margin-bottom: 36px;
+    }
+    .flow .node {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 18px; text-align: center; box-shadow: var(--shadow);
+    }
+    .flow .node b { display: block; font-size: 18px; }
+    .flow .node span { color: var(--muted); font-size: 15px; }
+    .flow .node.agent { border: 2px solid var(--accent); background: var(--accent-soft); }
+    .flow .node.wp { background: var(--text); color: #fff; border-color: var(--text); }
+    .flow .node.wp span { color: #c9d2de; }
+    .flow .arrow { color: var(--accent); font-size: 28px; font-weight: 700; }
+    .flow .lanes { display: grid; gap: 8px; }
+    .flow .lane {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 10px 14px; border-radius: 10px; background: var(--surface); border: 1px solid var(--line);
+      font-weight: 600; font-size: 16px;
+    }
+    .flow .lane.main { border: 2px solid var(--green); background: var(--green-soft); }
+    .flow .lane small { font-weight: 400; color: var(--muted); font-size: 14px; }
+    @media (max-width: 860px) {
+      .flow { grid-template-columns: 1fr; }
+      .flow .arrow { transform: rotate(90deg); justify-self: center; }
+    }
+
+    .channel { position: relative; display: flex; flex-direction: column; gap: 10px; }
+    .channel.main { border: 2px solid var(--green); }
+    .channel .badge {
+      position: absolute; top: -12px; right: 16px; padding: 2px 10px; border-radius: 999px;
+      background: var(--green); color: #fff; font-size: 13px; font-weight: 600;
+    }
+    .channel h3 { margin: 0; }
+    .channel .full { color: var(--muted); font-size: 15px; margin-top: -6px; }
+    .channel dl { margin: 0; display: grid; gap: 8px; font-size: 16px; }
+    .channel dt { font-weight: 600; font-size: 14px; color: var(--accent-ink); text-transform: uppercase; letter-spacing: 0.04em; }
+    .channel dd { margin: 0; color: var(--text); }
+
+    .yes { color: var(--green); font-weight: 600; }
+    .part { color: var(--warm); font-weight: 600; }
+    .no { color: var(--muted); }
+    .compare { margin-top: 32px; }
+    .compare td:first-child { white-space: normal; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../" data-t="nav.brand">WordPress + KI</a>
+      <nav class="chapters" aria-label="Kapitel" data-t-attr="aria-label:nav.label">
+        <a href="#kapitel-1"><span class="num">1</span><span data-t="nav.c1">WordPress</span></a>
+        <a href="#kapitel-2"><span class="num">2</span><span data-t="nav.c2">Ultimate Member</span></a>
+        <a href="#kapitel-3"><span class="num">3</span><span data-t="nav.c3">Genauer</span></a>
+        <a href="#kapitel-4"><span class="num">4</span><span data-t="nav.c4">KI-Agent</span></a>
+      </nav>
+      <div class="lang-switch" aria-label="Sprache"></div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ===================== Start ===================== -->
+    <section class="chapter hero" id="start">
+      <span class="kicker" data-t="hero.kicker">Gemeinsame Grundlage</span>
+      <h1 data-t="hero.title">WordPress und Ultimate Member – einfacher verwalten mit einem KI-Agenten</h1>
+      <p class="lead" data-t="hero.lead">Ein kurzer Rundgang in vier Schritten. So sprechen wir vom Gleichen, bevor wir über Lösungen sprechen.</p>
+      <ol class="agenda">
+        <li><a href="#kapitel-1"><span class="num">1</span><span><span data-t="agenda.1">WordPress und Plugins</span><small data-t="agenda.1s">Nur kurz – das kennen Sie.</small></span></a></li>
+        <li><a href="#kapitel-2"><span class="num">2</span><span><span data-t="agenda.2">Ultimate Member auf einen Blick</span><small data-t="agenda.2s">Was das Plugin für Sie tut.</small></span></a></li>
+        <li><a href="#kapitel-3"><span class="num">3</span><span><span data-t="agenda.3">Ultimate Member etwas genauer</span><small data-t="agenda.3s">Wo die Einstellungen wirklich liegen.</small></span></a></li>
+        <li><a href="#kapitel-4"><span class="num">4</span><span><span data-t="agenda.4">Wie ein KI-Agent WordPress verwaltet</span><small data-t="agenda.4s">MCP, REST API und WP-CLI.</small></span></a></li>
+      </ol>
+      <p class="hint-keys" data-t="hero.keys">Weiter mit <kbd>→</kbd> oder <kbd>Leertaste</kbd>, zurück mit <kbd>←</kbd>.</p>
+    </section>
+
+    <!-- ===================== Chapter 1 ===================== -->
+    <section class="chapter" id="kapitel-1">
+      <span class="kicker" data-t="c1.kicker">Schritt 1 · Kurz</span>
+      <h2 data-t="c1.title">WordPress und Plugins</h2>
+      <p class="lead" data-t="c1.lead">WordPress ist das Fundament. Plugins sind Bausteine, die neue Funktionen hinzufügen.</p>
+
+      <div class="stack">
+        <div class="layer site"><b data-t="c1.site">Ihre Website</b><span data-t="c1.site.s">Das, was Besucher sehen und nutzen</span></div>
+        <div class="row3">
+          <div class="layer"><b data-t="c1.theme">Theme</b><span data-t="c1.theme.s">Aussehen und Aufbau der Seiten</span></div>
+          <div class="layer plugins">
+            <b data-t="c1.plugins">Plugins</b>
+            <span data-t="c1.plugins.s">Zusätzliche Funktionen</span>
+            <div class="chips">
+              <span class="chip um">Ultimate Member</span>
+              <span class="chip" data-t="c1.chip.shop">Shop</span>
+              <span class="chip" data-t="c1.chip.events">Veranstaltungen</span>
+              <span class="chip" data-t="c1.chip.seo">SEO</span>
+              <span class="chip" data-t="c1.chip.more">…</span>
+            </div>
+          </div>
+          <div class="layer"><b data-t="c1.content">Inhalte</b><span data-t="c1.content.s">Seiten, Beiträge, Bilder</span></div>
+        </div>
+        <div class="layer core"><b data-t="c1.core">WordPress-Kern</b><span data-t="c1.core.s">Verwaltung, Benutzer, Rechte, Schnittstellen</span></div>
+        <div class="layer db"><b data-t="c1.db">Datenbank</b><span data-t="c1.db.s">Hier wird fast alles gespeichert</span></div>
+      </div>
+
+      <p class="note" data-t="c1.note">Wichtig für heute: Ultimate Member ist so ein Plugin. Fast alles, was es tut, steht in der <b>Datenbank</b> – nicht in Dateien. Das ist der Schlüssel für Kapitel 3 und 4.</p>
+    </section>
+
+    <!-- ===================== Chapter 2 ===================== -->
+    <section class="chapter" id="kapitel-2">
+      <span class="kicker" data-t="c2.kicker">Schritt 2</span>
+      <h2 data-t="c2.title">Ultimate Member auf einen Blick</h2>
+      <p class="lead" data-t="c2.lead">Ultimate Member macht aus einer WordPress-Seite eine Mitglieder-Plattform. So sieht der Weg eines Mitglieds aus:</p>
+
+      <ol class="journey journey-wrap">
+        <li><b data-t="c2.j1">Registrieren</b><span data-t="c2.j1s">Formular mit Ihren Feldern</span></li>
+        <li><b data-t="c2.j2">Freischalten</b><span data-t="c2.j2s">automatisch oder von Hand</span></li>
+        <li><b data-t="c2.j3">Rolle erhalten</b><span data-t="c2.j3s">z. B. Basis oder Premium</span></li>
+        <li><b data-t="c2.j4">Profil pflegen</b><span data-t="c2.j4s">eigene Angaben, Bild</span></li>
+        <li><b data-t="c2.j5">Inhalte nutzen</b><span data-t="c2.j5s">nur was die Rolle erlaubt</span></li>
+      </ol>
+
+      <div class="grid cols-3">
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div>
+          <h3 data-t="c2.f1">Formulare</h3>
+          <p data-t="c2.f1s">Registrierung, Anmeldung und Profil. Felder per Baukasten.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <h3 data-t="c2.f2">Profile</h3>
+          <p data-t="c2.f2s">Jedes Mitglied hat eine eigene Profilseite.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="7" height="7" rx="1.5"/><rect x="14" y="4" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+          <h3 data-t="c2.f3">Mitgliederverzeichnis</h3>
+          <p data-t="c2.f3s">Liste aller Mitglieder, mit Suche und Filtern.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3 data-t="c2.f4">Rollen und Rechte</h3>
+          <p data-t="c2.f4s">Wer darf was? Zum Beispiel Basis- und Premium-Mitglieder.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+          <h3 data-t="c2.f5">Geschützte Inhalte</h3>
+          <p data-t="c2.f5s">Seiten nur für angemeldete Mitglieder oder bestimmte Rollen.</p>
+        </div>
+        <div class="card">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+          <h3 data-t="c2.f6">E-Mails</h3>
+          <p data-t="c2.f6s">Willkommen, Freischaltung, Passwort – automatisch versendet.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== Chapter 3 ===================== -->
+    <section class="chapter" id="kapitel-3">
+      <span class="kicker" data-t="c3.kicker">Schritt 3</span>
+      <h2 data-t="c3.title">Ultimate Member etwas genauer</h2>
+      <p class="lead" data-t="c3.lead">Was Sie im Admin-Bereich anklicken, landet an festen Stellen in der Datenbank. Genau dort kann ein KI-Agent gezielt ansetzen.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-t="c3.th1">Bereich</th>
+              <th data-t="c3.th2">Wo Sie es heute einstellen</th>
+              <th data-t="c3.th3">Wo es gespeichert ist</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span data-t="c3.r1">Formulare</span><span class="sub" data-t="c3.r1s">Registrierung, Anmeldung, Profil</span></td>
+              <td data-t="c3.r1a">Ultimate Member → Formulare</td>
+              <td data-t="c3.r1b">Eigener Inhaltstyp <code>um_form</code>, Felder als Zusatzdaten</td>
+            </tr>
+            <tr>
+              <td><span data-t="c3.r2">Rollen</span><span class="sub" data-t="c3.r2s">z. B. Basis, Premium</span></td>
+              <td data-t="c3.r2a">Ultimate Member → Benutzerrollen</td>
+              <td data-t="c3.r2b">WordPress-Rollen mit Zusatz-Einstellungen</td>
+            </tr>
+            <tr>
+              <td><span data-t="c3.r3">Mitgliederverzeichnis</span></td>
+              <td data-t="c3.r3a">Ultimate Member → Mitgliederverzeichnisse</td>
+              <td data-t="c3.r3b">Eigener Inhaltstyp <code>um_directory</code></td>
+            </tr>
+            <tr>
+              <td><span data-t="c3.r4">Geschützte Inhalte</span></td>
+              <td data-t="c3.r4a">Im Seiten-Editor, Kasten „Ultimate Member“</td>
+              <td data-t="c3.r4b">Zusatzdaten der jeweiligen Seite</td>
+            </tr>
+            <tr>
+              <td><span data-t="c3.r5">Kontostatus</span><span class="sub" data-t="c3.r5s">freigeschaltet, wartend, gesperrt</span></td>
+              <td data-t="c3.r5a">Benutzer → Mitglied bearbeiten</td>
+              <td data-t="c3.r5b">Zusatzdaten des Benutzers</td>
+            </tr>
+            <tr>
+              <td><span data-t="c3.r6">Einstellungen und E-Mails</span></td>
+              <td data-t="c3.r6a">Ultimate Member → Einstellungen</td>
+              <td data-t="c3.r6b">Ein Eintrag mit allen Optionen (<code>um_options</code>)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="note warm" data-t="c3.note">Gut zu wissen: Die Felder der Formulare stehen in einem kompakten Spezialformat in der Datenbank. Man ändert sie deshalb sicherer über Werkzeuge als direkt in der Datenbank. Genau das übernimmt der KI-Agent.</p>
+    </section>
+
+    <!-- ===================== Chapter 4 ===================== -->
+    <section class="chapter" id="kapitel-4">
+      <span class="kicker" data-t="c4.kicker">Schritt 4</span>
+      <h2 data-t="c4.title">Wie ein KI-Agent WordPress verwaltet</h2>
+      <p class="lead" data-t="c4.lead">Der KI-Agent arbeitet in Visual Studio Code. Sie beschreiben den Wunsch in normaler Sprache. Der Agent spricht über drei Wege mit WordPress.</p>
+
+      <div class="flow">
+        <div class="node"><b data-t="c4.n1">Ihr Wunsch</b><span data-t="c4.n1s">„Füge ein Feld Telefon hinzu.“</span></div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node agent">
+          <b data-t="c4.n2">KI-Agent in VS Code</b>
+          <div class="lanes" style="margin-top:10px">
+            <div class="lane main">MCP <small data-t="c4.l1">Hauptweg</small></div>
+            <div class="lane">REST API <small data-t="c4.l2">Ergänzung</small></div>
+            <div class="lane">WP-CLI <small data-t="c4.l3">Technik</small></div>
+          </div>
+        </div>
+        <div class="arrow" aria-hidden="true">→</div>
+        <div class="node wp"><b>WordPress</b><span data-t="c4.n3s">+ Ultimate Member</span></div>
+      </div>
+
+      <div class="grid cols-3">
+        <div class="card channel main">
+          <span class="badge" data-t="c4.l1">Hauptweg</span>
+          <h3>MCP</h3>
+          <div class="full">Model Context Protocol</div>
+          <dl>
+            <dt data-t="c4.what">Was ist das?</dt>
+            <dd data-t="c4.mcp.what">Ein offener Standard, über den KI-Agenten die Werkzeuge einer Website direkt nutzen. Die Website bietet „Fähigkeiten“ an, der Agent ruft sie auf.</dd>
+            <dt data-t="c4.good">Stärke</dt>
+            <dd data-t="c4.mcp.good">Für KI gebaut. Klar festgelegte Aktionen. Rechte genau steuerbar.</dd>
+            <dt data-t="c4.needs">Braucht</dt>
+            <dd data-t="c4.mcp.needs">Ein MCP-Plugin und einen Zugang mit Anwendungspasswort.</dd>
+          </dl>
+        </div>
+        <div class="card channel">
+          <h3>REST API</h3>
+          <div class="full" data-t="c4.rest.full">Programmier-Schnittstelle über das Internet</div>
+          <dl>
+            <dt data-t="c4.what">Was ist das?</dt>
+            <dd data-t="c4.rest.what">In jedes WordPress eingebaut. Programme lesen und ändern darüber Inhalte und Benutzer.</dd>
+            <dt data-t="c4.good">Stärke</dt>
+            <dd data-t="c4.rest.good">Immer vorhanden. Gut für Inhalte, Benutzer und Shop-Daten.</dd>
+            <dt data-t="c4.needs">Braucht</dt>
+            <dd data-t="c4.rest.needs">Einen Zugang mit Anwendungspasswort.</dd>
+          </dl>
+        </div>
+        <div class="card channel">
+          <h3>WP-CLI</h3>
+          <div class="full" data-t="c4.cli.full">Kommandozeile für WordPress</div>
+          <dl>
+            <dt data-t="c4.what">Was ist das?</dt>
+            <dd data-t="c4.cli.what">Befehle, die direkt auf dem Server laufen. Das Werkzeug der Profis.</dd>
+            <dt data-t="c4.good">Stärke</dt>
+            <dd data-t="c4.cli.good">Sehr mächtig: Einstellungen, Plugins, Updates, Backups, Datenbank.</dd>
+            <dt data-t="c4.needs">Braucht</dt>
+            <dd data-t="c4.cli.needs">SSH-Zugang beim Hosting.</dd>
+          </dl>
+        </div>
+      </div>
+
+      <div class="table-wrap compare">
+        <table>
+          <thead>
+            <tr><th></th><th>MCP</th><th>REST API</th><th>WP-CLI</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-t="c4.q1">Für KI-Agenten gebaut</td>
+              <td class="yes" data-t="c4.yes">ja</td>
+              <td class="part" data-t="c4.partly">teilweise</td>
+              <td class="part" data-t="c4.partly">teilweise</td>
+            </tr>
+            <tr>
+              <td data-t="c4.q2">Ultimate Member einstellen</td>
+              <td class="yes" data-t="c4.a2a">ja, mit passenden Fähigkeiten</td>
+              <td class="part" data-t="c4.a2b">eingeschränkt</td>
+              <td class="yes" data-t="c4.yes">ja</td>
+            </tr>
+            <tr>
+              <td data-t="c4.q3">Updates und Backups</td>
+              <td class="no">–</td>
+              <td class="no">–</td>
+              <td class="yes" data-t="c4.yes">ja</td>
+            </tr>
+            <tr>
+              <td data-t="c4.q4">Braucht Server-Zugang</td>
+              <td data-t="c4.no">nein</td>
+              <td data-t="c4.no">nein</td>
+              <td data-t="c4.a4c">ja (SSH)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="note" data-t="c4.note">Unser Ansatz: <b>MCP als Hauptweg</b>, WP-CLI für alles Technische, die REST API als Ergänzung. Aktuelle WordPress-Versionen bringen die Grundlage für MCP schon mit – auf Ihrer Seite ist ein MCP-Zugang bereits zu sehen. Fehlt eine Fähigkeit, ergänzen wir sie.</p>
+
+      <p style="margin-top:32px"><a class="btn" href="../demo/" data-t="c4.cta">Zur Live-Demo →</a></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span data-t="footer.left">Proof of Concept · Stand November 2026</span>
+    <a href="../" data-t="footer.home">Zur Startseite</a>
+  </footer>
+
+  <script src="texte.js"></script>
+  <script src="../assets/i18n.js"></script>
+  <script>
+    // Chapter navigation: highlight the current chapter, and jump with the keyboard.
+    (function () {
+      var sections = Array.prototype.slice.call(document.querySelectorAll("main > .chapter"));
+      var links = document.querySelectorAll(".chapters a");
+
+      function current() {
+        var y = window.scrollY + 120, idx = 0;
+        sections.forEach(function (s, i) { if (s.offsetTop <= y) idx = i; });
+        return idx;
+      }
+      function mark() {
+        var id = sections[current()].id;
+        links.forEach(function (a) { a.classList.toggle("active", a.getAttribute("href") === "#" + id); });
+      }
+      window.addEventListener("scroll", mark, { passive: true });
+      mark();
+
+      document.addEventListener("keydown", function (e) {
+        if (e.target.closest && e.target.closest("input, textarea, select, button")) return;
+        var i = current(), next = null;
+        if (e.key === "ArrowRight" || e.key === "PageDown" || (e.key === " " && !e.shiftKey)) next = i + 1;
+        if (e.key === "ArrowLeft" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) next = i - 1;
+        if (next === null) return;
+        e.preventDefault();
+        next = Math.max(0, Math.min(sections.length - 1, next));
+        sections[next].scrollIntoView({ behavior: "smooth" });
+      });
+    })();
+  </script>
+</body>
+</html>

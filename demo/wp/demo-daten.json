@@ -8,7 +8,7 @@
     "user_email":     { "typ": "email",    "label": "E-Mail", "pflicht": true },
     "user_password":  { "typ": "password", "label": "Passwort", "pflicht": true },
     "kontotyp":       { "typ": "radio",    "label": "Kontotyp", "pflicht": true,
-                        "optionen": ["eLearning Dienstleister", "Freelancer"] },
+                        "optionen": ["eLearning Dienstleister", "Freelancer", "Hochschule"] },
     "profil_sprache": { "typ": "checkbox", "label": "Sprache des Profils", "pflicht": true,
                         "optionen": ["Deutsch", "Englisch"] },
     "profil_typ":     { "typ": "radio",    "label": "Profil", "pflicht": true,

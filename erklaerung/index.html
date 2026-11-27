@@ -136,6 +136,29 @@
     .no { color: var(--muted); }
     .compare { margin-top: 32px; }
     .compare td:first-child { white-space: normal; }
+
+    /* ---------- Chapter 5: safe workflow ---------- */
+    .steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: wf; }
+    .steps li {
+      position: relative; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding: 20px 20px 20px 72px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .steps li::before {
+      counter-increment: wf; content: counter(wf);
+      position: absolute; left: 20px; top: 20px; width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center; background: var(--accent); color: #fff; font-weight: 700;
+    }
+    .steps li b { font-size: 19px; }
+    .steps li > span:last-child { color: var(--muted); font-size: 16px; }
+    .steps .who {
+      align-self: flex-start; font-size: 13px; font-weight: 600; padding: 1px 10px; border-radius: 999px;
+      background: var(--surface-2); color: var(--muted);
+    }
+    .steps .who.agent { background: var(--accent-soft); color: var(--accent-ink); }
+    .steps .who.you { background: var(--green-soft); color: var(--green); }
+    .steps li.back { border-style: dashed; }
+    .steps li.back::before { background: var(--warm); content: "↺"; }
+    @media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -147,6 +170,7 @@
         <a href="#kapitel-2"><span class="num">2</span><span data-t="nav.c2">Ultimate Member</span></a>
         <a href="#kapitel-3"><span class="num">3</span><span data-t="nav.c3">Genauer</span></a>
         <a href="#kapitel-4"><span class="num">4</span><span data-t="nav.c4">KI-Agent</span></a>
+        <a href="#kapitel-5"><span class="num">5</span><span data-t="nav.c5">Sicherer Ablauf</span></a>
       </nav>
       <div class="lang-switch" aria-label="Sprache"></div>
     </div>
@@ -157,12 +181,13 @@
     <section class="chapter hero" id="start">
       <span class="kicker" data-t="hero.kicker">Gemeinsame Grundlage</span>
       <h1 data-t="hero.title">WordPress und Ultimate Member – einfacher verwalten mit einem KI-Agenten</h1>
-      <p class="lead" data-t="hero.lead">Ein kurzer Rundgang in vier Schritten. So sprechen wir vom Gleichen, bevor wir über Lösungen sprechen.</p>
+      <p class="lead" data-t="hero.lead">Ein kurzer Rundgang in fünf Schritten. So sprechen wir vom Gleichen, bevor wir über Lösungen sprechen.</p>
       <ol class="agenda">
         <li><a href="#kapitel-1"><span class="num">1</span><span><span data-t="agenda.1">WordPress und Plugins</span><small data-t="agenda.1s">Nur kurz – das kennen Sie.</small></span></a></li>
         <li><a href="#kapitel-2"><span class="num">2</span><span><span data-t="agenda.2">Ultimate Member auf einen Blick</span><small data-t="agenda.2s">Was das Plugin für Sie tut.</small></span></a></li>
         <li><a href="#kapitel-3"><span class="num">3</span><span><span data-t="agenda.3">Ultimate Member etwas genauer</span><small data-t="agenda.3s">Wo die Einstellungen wirklich liegen.</small></span></a></li>
         <li><a href="#kapitel-4"><span class="num">4</span><span><span data-t="agenda.4">Wie ein KI-Agent WordPress verwaltet</span><small data-t="agenda.4s">MCP, REST API und WP-CLI.</small></span></a></li>
+        <li><a href="#kapitel-5"><span class="num">5</span><span><span data-t="agenda.5">Der sichere Ablauf jeder Änderung</span><small data-t="agenda.5s">Sie behalten die Kontrolle.</small></span></a></li>
       </ol>
       <p class="hint-keys" data-t="hero.keys">Weiter mit <kbd>→</kbd> oder <kbd>Leertaste</kbd>, zurück mit <kbd>←</kbd>.</p>
     </section>
@@ -394,6 +419,49 @@
       </div>
 
       <p class="note" data-t="c4.note">Unser Ansatz: <b>MCP als Hauptweg</b>, WP-CLI für alles Technische, die REST API als Ergänzung. Aktuelle WordPress-Versionen bringen die Grundlage für MCP schon mit – auf Ihrer Seite ist ein MCP-Zugang bereits zu sehen. Fehlt eine Fähigkeit, ergänzen wir sie.</p>
+
+    </section>
+
+    <!-- ===================== Chapter 5 ===================== -->
+    <section class="chapter" id="kapitel-5">
+      <span class="kicker" data-t="c5.kicker">Schritt 5</span>
+      <h2 data-t="c5.title">Der sichere Ablauf jeder Änderung</h2>
+      <p class="lead" data-t="c5.lead">Jede Änderung geht denselben festen Weg. Der KI-Agent arbeitet schnell – aber nie allein und nie direkt auf der Live-Seite.</p>
+
+      <ol class="steps">
+        <li>
+          <span class="who" data-t="c5.who1">Ihr Team</span>
+          <b data-t="c5.s1">Wunsch</b>
+          <span data-t="c5.s1s">Die Änderung wird in normalen Worten beschrieben.</span>
+        </li>
+        <li>
+          <span class="who agent" data-t="c5.who2">KI-Agent</span>
+          <b data-t="c5.s2">Umsetzung auf der Testseite</b>
+          <span data-t="c5.s2s">Der Agent baut die Änderung auf einer Kopie der Website. Die Live-Seite bleibt unberührt.</span>
+        </li>
+        <li>
+          <span class="who" data-t="c5.who3">Mensch</span>
+          <b data-t="c5.s3">Prüfung</b>
+          <span data-t="c5.s3s">Ein Mensch prüft das Ergebnis und den Code.</span>
+        </li>
+        <li>
+          <span class="who you" data-t="c5.who4">Sie</span>
+          <b data-t="c5.s4">Freigabe</b>
+          <span data-t="c5.s4s">Sie sehen die Änderung auf der Testseite und geben grünes Licht.</span>
+        </li>
+        <li>
+          <span class="who agent" data-t="c5.who5">KI-Agent + Mensch</span>
+          <b data-t="c5.s5">Live schalten</b>
+          <span data-t="c5.s5s">Erst ein Backup, dann dieselbe Änderung auf der Live-Seite.</span>
+        </li>
+        <li class="back">
+          <span class="who" data-t="c5.who6">Falls nötig</span>
+          <b data-t="c5.s6">Rückweg</b>
+          <span data-t="c5.s6s">Passt etwas nicht, ist der alte Stand in Minuten zurück.</span>
+        </li>
+      </ol>
+
+      <p class="note" data-t="c5.note">Jede Änderung ist dokumentiert: was, wann, warum und von wem freigegeben. So bleibt WordPress jederzeit unter Ihrer Kontrolle.</p>
 
       <p style="margin-top:32px"><a class="btn" href="../demo/" data-t="c4.cta">Zur Live-Demo →</a></p>
     </section>

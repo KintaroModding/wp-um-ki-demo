@@ -39,6 +39,14 @@
       "titel_en": "Filter by city",
       "text_de": "Im Who Is Who kann man jetzt nach Ort filtern.",
       "text_en": "The Who Is Who can now be filtered by city."
+    },
+    {
+      "version": "6",
+      "datum": "2026-11-27",
+      "titel_de": "Profilsprache Französisch",
+      "titel_en": "Profile language: French",
+      "text_de": "Neue Option „Französisch“ bei der Sprache des Profils.",
+      "text_en": "New option “French” for the profile language."
     }
   ]
 }

@@ -10,7 +10,7 @@
     "kontotyp":       { "typ": "radio",    "label": "Kontotyp", "pflicht": true,
                         "optionen": ["eLearning Dienstleister", "Freelancer", "Hochschule"] },
     "profil_sprache": { "typ": "checkbox", "label": "Sprache des Profils", "pflicht": true,
-                        "optionen": ["Deutsch", "Englisch"] },
+                        "optionen": ["Deutsch", "Englisch", "Französisch"] },
     "profil_typ":     { "typ": "radio",    "label": "Profil", "pflicht": true,
                         "optionen": ["Basis-Profil", "Premium-Profil", "Partner-Profil"],
                         "hilfe": "Premium-Profile erscheinen mit Logo und ausführlicher Beschreibung." },
